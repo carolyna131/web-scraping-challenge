@@ -54,44 +54,50 @@ def scrape():
 
 
     # Mars Hemisphere
-    base_url = "https://astrogeology.usgs.gov"
-    mars_hemi_url= "https://astrogeology.usgs.gov/search/resultsq=hemisphere+enhanced&k1=target&v1=Mars"
-    browser.visit(mars_hemi_url)
+
+    url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(url)
     html = browser.html
-    soup = bs(html,'html.parser')
-    hemispheres_list = soup.find('div', id='product-section')
-
+    soup = bs(html,'html.parser')   
     
-    hemi_desc = hemispheres_list.find_all("div", class_="description")
+
+    # Get the html containing the title and put itnto a list
+    title_list = soup.find_all('div', class_='description')
+
+    # Loop through the 'div' objects and scrape the titles and urls of images
+    # Create a list to store the dictionaries
     hemisphere_image_urls = []
-
-    for i in hemi_desc:
-        hemisphere_dict = {}
+    for title in title_list:
+        # Navigate browser to page then click on title link to image page
+        browser.visit(url)
+        browser.click_link_by_partial_text(title.a.h3.text)
     
-        title = i.find('h3').text
-        hemisphere_dict['title']= title
-        link = i.find('a')['href']
-        page = base_url+link
+         # Grab the destination page html and make into BeautifulSoup Object
+        html = browser.html
+        soup = bs(html, 'html.parser')
     
-        # Navigate the new page
-        browser.visit(page)
-        hemisphere_html = browser.html
-        hemisphere_page = bs(hemisphere_html,'html.parser')
+         # Parse the imgage source(src) relative url and then append to domain name
+         # for absolute url
+        img_url_list = soup.find('img', class_='wide-image')
+        img_url = f"https://astrogeology.usgs.gov{img_url_list['src']}"
     
-        # save mars hemisphere images urls
-        img_url = hemisphere_page.find('li').a['href']
-        hemisphere_dict['img_url']= img_url
-        hemisphere_image_urls.append(hemisphere_dict)
+         # Create Dictionary with returned values and add dict to hemi_image_urls list
+        post = {
+                'title': title.a.h3.text,
+                'image_url': img_url
+                }
+            
+        hemisphere_image_urls.append(post)
+    
+    # Initialize mars_data dictionary to hold all scraped values to be entered into MongoDB
+                
 
-        return hemisphere_image_urls
-
-      
-
-    mars_info = {}
-    mars_info["news_title"] = news_title
-    mars_info["news_p"] = news_p
-    mars_info["featured_image_url"] = featured_image_url
-    mars_info["marsfacts_html"] = facts_html_table
-    mars_info["hemisphere_image_urls"] = hemisphere_image_urls
-       
-    return mars_info
+    mars_data = {
+    "news_titles": news_titles,
+    "news_paragraph": news_paragraph,
+    "featured_image_url": featured_image_url,
+    "mars_facts_table_html": mars_facts_table_html,
+    "hemisphere_image_urls": hemisphere_image_urls
+    }
+    print(mars_data)   
+    return mars_data

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <title>Mission to Mars</title>
+ </head>
+<body>
+  <div class="container">
+    <div class="jumbotron text-center">
+      <h1>Mission to Mars</h1>
+      <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
+    </div>
+  </div>  
+ <!-- Mars data displayed on page -->  
+ <div class="container-fluid ">
+    <div class="row">
+        <div class="col my-8 mx-5 p-5">
+          <div class="col mx-2 p-5">
+            <h1 class="display-5 text-info">Latest Mars News Article:</h1>
+            <hr>
+            <h2 class="display-5">{{mars_data.news_titles}}</h2>
+            <p>{{mars_data.news_paragraph}}</p>
+          </div>
+            <div class="container-fluid ">
+              <div class="row">
+                  <div class="col mx-2 p-5">
+                      <h1 class="display-5 text-info">Featured Mars Image of the Day</h1>
+                      <hr>
+                      <img src="{{mars_data.featured_image_url}}" class="float-left mr-3 about-img img-responsive" width="100%" alt="Featured Mars Daily Image">
+                  </div>
+                  <div class="col-lg-4 my-5 mx-2 p-5 align-self-start">
+                      <br>
+                      <br>
+                      <h3 class="display-5 text-info">Mars Facts</h3>
+                      <hr>
+                      {% block table %}
+                        {{mars_data.mars_facts_table_html|safe}}
+                      {% endblock %}
+                   
+                  </div>
+              </div>
+          </div>
+            <br>
+          <div class="card-deck text-center">
+              <div class="card border border-info my-2">
+                  <div class="card-body">
+                  <h3 class="card-title text-info">{{mars_data.hemisphere_image_urls[0].title}}</h3>
+                  </div>
+                  <img src="{{mars_data.hemisphere_image_urls[0].image_url}}" class="img-responsive" width="100%" alt="Hempisphere of Mars image 0">
+              </div>
+              <div class="card border border-info my-2">
+                  <div class="card-body">
+                  <h3 class="card-title text-info">{{mars_data.hemisphere_image_urls[1].title}}</h3>
+                  </div>
+                  <img src="{{mars_data.hemisphere_image_urls[1].image_url}}" class="img-responsive" width="100%" alt="Hempisphere of Mars image 1">
+              </div>
+          </div>
+          <div class="card-deck text-center">
+              <div class="card border border-info my-2">
+                  <div class="card-body">
+                  <h3 class="card-title text-info">{{mars_data.hemisphere_image_urls[2].title}}</h3>
+                  </div>
+                  <img src="{{mars_data.hemisphere_image_urls[2].image_url}}" class="img-responsive" width="100%" alt="Hempisphere of Mars image 2">
+              </div>
+              <div class="card border border-info my-2">
+                  <div class="card-body">
+                  <h3 class="card-title text-info">{{mars_data.hemisphere_image_urls[3].title}}</h3>
+                  </div>
+                  <img src="{{mars_data.hemisphere_image_urls[3].image_url}}" class="img-responsive" width="100%" alt="Hempisphere of Mars image 3">
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
